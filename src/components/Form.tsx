@@ -17,6 +17,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { TextoHeader } from './TextoHeader';
 import { useEffect, useState } from 'react';
+import absoluteUrl from 'next';
 
 interface produtoInterface {
 	id: number;
@@ -28,9 +29,12 @@ export function Form({ action }: { action: any }) {
 	const [produtos, setProdutos] = useState(
 		Array<produtoInterface>
 	);
+	const url = 
+		`${process.env.NEXT_PUBLIC_API_BASE_URL}/produto`
+	;
 
 	useEffect(() => {
-		fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/produto`)
+		fetch(url)
 			.then((res) => res.json())
 			.then((produtos: any) => {
 				setProdutos(produtos);
@@ -39,7 +43,6 @@ export function Form({ action }: { action: any }) {
 
 	return (
 		<div className="flex flex-col w-3/5 mx-auto	">
-			
 			<TextoHeader />
 			<div className=" flex flex-col w-full bg-zinc-700 m-2	">
 				<form
