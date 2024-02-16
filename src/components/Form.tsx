@@ -36,9 +36,10 @@ export function Form({ action }: { action: any }) {
 				setProdutos(produtos);
 			});
 	}, []);
-	console.log(produtos);
+
 	return (
 		<div className="flex flex-col w-3/5 mx-auto	">
+			{process.env.NEXT_PUBLIC_IMAGE}
 			<TextoHeader />
 			<div className=" flex flex-col w-full bg-zinc-700 m-2	">
 				<form
