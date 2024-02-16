@@ -39,7 +39,7 @@ export function Form({ action }: { action: any }) {
 
 	return (
 		<div className="flex flex-col w-3/5 mx-auto	">
-			<div>{process.env.NEXT_PUBLIC_IMAGE} teste</div>
+			
 			<TextoHeader />
 			<div className=" flex flex-col w-full bg-zinc-700 m-2	">
 				<form
