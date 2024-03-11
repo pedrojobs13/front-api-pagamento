@@ -1,6 +1,9 @@
+import { Suspense } from 'react';
 import { Form } from '../components/Form';
 import { ImageComponent } from '../components/ImageComponent';
 import { redirect } from 'next/navigation';
+import { Spinner } from '@phosphor-icons/react/dist/ssr';
+
 interface formValue {
 	nome: FormDataEntryValue | null;
 	sobrenome: FormDataEntryValue | null;
@@ -49,15 +52,18 @@ export default async function Home() {
 				body: JSON.stringify(value),
 			}
 		);
+
 		if (res.status == 201) {
 			const repo = await res.json();
 			const sendrepo: responseJson = repo;
+			
 			redirect(`/payment/${sendrepo.codigo}`);
 		}
 	}
 	return (
+		
 		<main className="flex flex-row gap-5 justify-between">
-			<Form action={onSubmit} />
+			<Form/>
 			<ImageComponent />
 		</main>
 	);

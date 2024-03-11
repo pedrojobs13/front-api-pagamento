@@ -1,5 +1,7 @@
+import  { queryClient } from '@/components/providers/TanstackProcider';
 import './globals.css';
 import { JetBrains_Mono } from 'next/font/google';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 export const metadata = {
 	title: 'Donate App',
 	description: 'Donate Now',
@@ -20,7 +22,9 @@ export default function RootLayout({
 				className={`bg-zinc-800 text-zinc-50 ${jetBrains.className} 
 				subpixel-antialiased`}
 			>
+				<QueryClientProvider  client={queryClient}>
 				{children}
+				</QueryClientProvider>
 				<h6 className="mb-0  left-0 bottom-0 m-auto p-2 ">
 					@powered by pedro
 				</h6>

@@ -16,8 +16,9 @@ import {
 } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { TextoHeader } from './TextoHeader';
-import { useEffect, useState } from 'react';
-import absoluteUrl from 'next';
+import { FormEvent, useEffect, useState } from 'react';
+import { useFormStatus } from 'react-dom';
+import { redirect, useRouter } from 'next/navigation';
 
 interface produtoInterface {
 	id: number;
@@ -25,14 +26,37 @@ interface produtoInterface {
 	descricao?: string;
 	foto?: string;
 }
-export function Form({ action }: { action: any }) {
+interface formValue {
+	nome: FormDataEntryValue | null;
+	sobrenome: FormDataEntryValue | null;
+	email: FormDataEntryValue | null;
+	produto: {
+		id: FormDataEntryValue | null;
+	};
+	valor: FormDataEntryValue | null;
+}
+interface responseJson {
+	codigo: string;
+	nome: string;
+	sobrenome: string;
+	email: string;
+	valor: number;
+	produto: {
+		id: string;
+		title: string;
+		descricao: string;
+		foto: string;
+		valor: number;
+	};
+}
+export function Form() {
+	const status = useFormStatus();
+	const { push } = useRouter();
 	const [produtos, setProdutos] = useState(
 		Array<produtoInterface>
 	);
-	const url = 
-		`${process.env.NEXT_PUBLIC_API_BASE_URL}/produto`
-	;
-
+	const [loading, setLoading] = useState(false);
+	const url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/produto`;
 	useEffect(() => {
 		fetch(url)
 			.then((res) => res.json())
@@ -40,14 +64,53 @@ export function Form({ action }: { action: any }) {
 				setProdutos(produtos);
 			});
 	}, []);
+	async function formHandler(
+		event: FormEvent<HTMLFormElement>
+	) {
+		event.preventDefault();
+		setLoading(true);
+
+		const formData = new FormData(event.currentTarget);
+
+		const value: formValue = {
+			nome: formData.get('nome'),
+			sobrenome: formData.get('sobrenome'),
+			email: formData.get('email'),
+			produto: {
+				id: formData.get('produto'),
+			},
+			valor: formData.get('valor'),
+		};
+		
+
+		 const fetchPayment = await fetch(
+		 	`${process.env.NEXT_PUBLIC_API_BASE_URL}/cliente`,
+		 	{
+		 		method: 'POST',
+		 		headers: {
+		 			'Access-Control-Allow-Methods':
+		 				'GET,OPTIONS,PATCH,DELETE,POST,PUT',
+		 			'Content-Type': 'application/json',
+		 		},
+		 		body: JSON.stringify(value),
+		 	}
+		 )
+		 	.then((res) => res.json())
+		 	.then((repo: any) => {
+		 		const sendrepo: responseJson = repo;
+		 		push(`/payment/${sendrepo.codigo}`);
+		 	});
+			 setLoading(false);
+	}
 
 	return (
 		<div className="flex flex-col w-3/5 mx-auto	">
 			<TextoHeader />
+
 			<div className=" flex flex-col w-full bg-zinc-700 m-2	">
 				<form
 					className="flex flex-col p-8 space-y-5"
-					action={action}
+					onSubmit={formHandler}
 				>
 					<div className="flex flex-col">
 						<label htmlFor="nome">Nome</label>
@@ -158,7 +221,7 @@ export function Form({ action }: { action: any }) {
 						</div>
 					</div>
 					<Button type="submit" className="bg-cyan-500">
-						Contribuir
+						{loading ? 'carregando...' : 'Contribuir'}
 					</Button>
 				</form>
 			</div>
