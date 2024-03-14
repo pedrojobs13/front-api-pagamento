@@ -1,5 +1,6 @@
 'use client';
 import { Button } from '@/components/ui/button';
+import { Check } from '@phosphor-icons/react/dist/ssr';
 import { useQuery } from '@tanstack/react-query';
 import { ReactNode, useState } from 'react';
 
@@ -16,7 +17,8 @@ interface Params {
 export function VerifyPayment({ id, children }: Params) {
 	const { isPending, error, data, isError } = useQuery({
 		queryKey: ['update'],
-		queryFn:  () => getTodos(id)
+		queryFn: () => getTodos(id),
+		refetchInterval: 1000 * 20
 	});
 	if (isPending) {
 		return <span>Loading...</span>;
@@ -27,8 +29,15 @@ export function VerifyPayment({ id, children }: Params) {
 	if (data.status == 'pending') {
 		return <>{children}</>;
 	} else if (data.status == 'approved') {
-		<div>pagamento aprovado</div>;
+		return (
+			<div className="flex flex-col">
+					<Check size={50} />
+				pagamento aprovado
+			</div>
+		);
 	} else {
-		<div>há algum erro tente novamente mais tarde</div>;
+		return (
+			<div>há algum erro tente novamente mais tarde</div>
+		);
 	}
 }
