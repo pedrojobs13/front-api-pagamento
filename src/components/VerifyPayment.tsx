@@ -30,7 +30,7 @@ export function VerifyPayment({ id, children }: Params) {
 		return <>{children}</>;
 	} else if (data.status == 'approved') {
 		return (
-			<div className="flex flex-col">
+			<div className="flex flex-col items-center">
 					<Check size={50} />
 				pagamento aprovado
 			</div>
