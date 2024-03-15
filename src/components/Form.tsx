@@ -83,7 +83,7 @@ export function Form() {
 		};
 		
 
-		 const fetchPayment = await fetch(
+		  await fetch(
 		 	`${process.env.NEXT_PUBLIC_API_BASE_URL}/cliente`,
 		 	{
 		 		method: 'POST',
@@ -94,13 +94,12 @@ export function Form() {
 		 		},
 		 		body: JSON.stringify(value),
 		 	}
-		 )
-		 	.then((res) => res.json())
+		 ).then((res) => res.json())
 		 	.then((repo: any) => {
 		 		const sendrepo: responseJson = repo;
 		 		push(`/payment/${sendrepo.codigo}`);
 		 	});
-			 setLoading(false);
+			 //setLoading(false);
 	}
 
 	return (

@@ -28,40 +28,8 @@ interface responseJson {
 	};
 }
 export default async function Home() {
-	async function onSubmit(event: FormData) {
-		'use server';
-		const value: formValue = {
-			nome: event.get('nome'),
-			sobrenome: event.get('sobrenome'),
-			email: event.get('email'),
-			produto: {
-				id: event.get('produto'),
-			},
-			valor: event.get('valor'),
-		};
-
-		const res = await fetch(
-			`${process.env.NEXT_PUBLIC_API_BASE_URL}/cliente`,
-			{
-				method: 'POST',
-				headers: {
-					'Access-Control-Allow-Methods':
-						'GET,OPTIONS,PATCH,DELETE,POST,PUT',
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(value),
-			}
-		);
-
-		if (res.status == 201) {
-			const repo = await res.json();
-			const sendrepo: responseJson = repo;
-			
-			redirect(`/payment/${sendrepo.codigo}`);
-		}
-	}
+	
 	return (
-		
 		<main className="flex flex-row gap-5 justify-between">
 			<Form/>
 			<ImageComponent />
